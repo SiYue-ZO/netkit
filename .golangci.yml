@@ -1,48 +1,55 @@
-# golangci-lint 配置
+version: "2"
 run:
-  timeout: 5m
   modules-download-mode: readonly
-
 linters:
   enable:
-    - errcheck       # 检查未处理的错误
-    - govet          # go vet 检查
-    - staticcheck    # 高级静态分析
-    - unused         # 未使用的代码
-    - gosimple       # 代码简化建议
-    - ineffassign    # 无效赋值
-    - typecheck      # 类型检查
-    - misspell       # 拼写检查
-    - gofmt          # 格式检查
-    - goimports      # import 排序
-    - gocritic       # 代码审查
-    - revive         # 替代 golint
-    - nilerr         # nil 错误检查
-    - errname        # 错误命名规范
-    - exhaustive     # switch 穷举检查
-
-linters-settings:
-  gocritic:
-    enabled-tags:
-      - diagnostic
-      - style
-      - performance
-  revive:
+    - errname
+    - exhaustive
+    - gocritic
+    - misspell
+    - nilerr
+    - revive
+  settings:
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - style
+        - performance
+    misspell:
+      locale: US
+    revive:
+      rules:
+        - name: exported
+          arguments:
+            - checkPrivateReceivers
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
     rules:
-      - name: exported
-        arguments:
-          - "checkPrivateReceivers"
-  misspell:
-    locale: US
-
+      - linters:
+          - errcheck
+          - gosec
+        path: _test\.go
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
 issues:
-  exclude-rules:
-    - path: _test\.go
-      linters:
-        - errcheck
-        - gosec
   max-issues-per-linter: 50
   max-same-issues: 10
-
 severity:
-  default-severity: warning
+  default: warning
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
