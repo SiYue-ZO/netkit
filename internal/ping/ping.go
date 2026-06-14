@@ -104,7 +104,7 @@ func (p *Pinger) pingICMP(ip net.IP, result *types.HostResult) {
 	defer conn.Close()
 
 	start := time.Now()
-	conn.SetDeadline(time.Now().Add(p.Timeout))
+	_ = conn.SetDeadline(time.Now().Add(p.Timeout))
 
 	// 发送 ICMP Echo (type 8, code 0)
 	msg := make([]byte, 8)
@@ -137,7 +137,7 @@ func (p *Pinger) pingICMP(ip net.IP, result *types.HostResult) {
 	result.RTT = time.Since(start).Round(time.Millisecond).String()
 }
 
-func checksum(msg []byte) (byte, byte) {
+func checksum(msg []byte) (hi, lo byte) {
 	sum := 0
 	for i := 0; i < len(msg)-1; i += 2 {
 		sum += int(msg[i])<<8 | int(msg[i+1])
@@ -252,7 +252,7 @@ func splitLines(s string) []string {
 	for i := 0; i < len(s); i++ {
 		if s[i] == '\n' {
 			line := s[start:i]
-			if len(line) > 0 && line[len(line)-1] == '\r' {
+			if line != "" && line[len(line)-1] == '\r' {
 				line = line[:len(line)-1]
 			}
 			lines = append(lines, line)

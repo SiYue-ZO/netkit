@@ -21,23 +21,23 @@ type PortInfo struct {
 
 // ScanOptions 通用扫描选项
 type ScanOptions struct {
-	Targets  []string
-	Timeout  int // seconds
-	Threads  int
-	Verbose  bool
-	Output   string // output file path
-	Format   string // json/csv/table
-	NoColor  bool
+	Targets []string
+	Timeout int // seconds
+	Threads int
+	Verbose bool
+	Output  string // output file path
+	Format  string // json/csv/table
+	NoColor bool
 }
 
 // CIDRInfo CIDR 网段信息
 type CIDRInfo struct {
-	CIDR         string   `json:"cidr"`
-	Network      string   `json:"network"`
-	FirstIP      string   `json:"first_ip"`
-	LastIP       string   `json:"last_ip"`
-	Mask         string   `json:"mask"`
-	HostCount    int      `json:"host_count"`
-	Broadcast    string   `json:"broadcast,omitempty"`
-	IPs          []string `json:"ips,omitempty"`
+	CIDR      string   `json:"cidr"`
+	Network   string   `json:"network"`
+	FirstIP   string   `json:"first_ip"`
+	LastIP    string   `json:"last_ip"`
+	Mask      string   `json:"mask"`
+	HostCount int      `json:"host_count"`
+	Broadcast string   `json:"broadcast,omitempty"`
+	IPs       []string `json:"ips,omitempty"`
 }
