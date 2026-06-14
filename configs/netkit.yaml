@@ -1,0 +1,30 @@
+# NetKit 默认配置文件
+# 放置于 ~/.netkit/netkit.yaml 或当前目录 netkit.yaml
+
+# 全局设置
+timeout: 5        # 默认超时(秒)
+threads: 50       # 默认并发线程数
+verbose: false    # 详细输出
+format: table     # 输出格式 (table/json/csv)
+no_color: false   # 禁用彩色输出
+
+# 端口扫描设置
+portscan:
+  default_ports: top100  # 默认端口范围
+  proto: tcp             # 默认协议
+  skip_ping: false       # 跳过存活探测
+
+# Ping 设置
+ping:
+  method: auto   # 探测方法 (icmp/tcp/auto)
+  count: 1       # 探测次数
+
+# DNS 设置 (后续版本)
+dns:
+  resolver: ""
+  timeout: 5
+
+# SSL 设置 (后续版本)
+ssl:
+  check_cipher: false
+  check_protocol: false

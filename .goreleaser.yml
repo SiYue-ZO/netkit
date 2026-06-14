@@ -1,0 +1,82 @@
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: netkit
+    main: .
+    binary: netkit
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+      - "386"
+    ignore:
+      - goos: darwin
+        goarch: "386"
+    ldflags:
+      - -s -w
+      - -X github.com/SiYue-ZO/netkit/cmd.version={{.Version}}
+      - -X github.com/SiYue-ZO/netkit/cmd.commit={{.Commit}}
+      - -X github.com/SiYue-ZO/netkit/cmd.date={{.Date}}
+
+archives:
+  - id: netkit
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - configs/*
+      - LICENSE
+      - README.md
+
+checksum:
+  name_template: "checksums.txt"
+
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^ci:"
+      - "merge conflict"
+      - Merge pull request
+      - Merge branch
+
+release:
+  github:
+    owner: SiYue-ZO
+    name: netkit
+  draft: false
+  prerelease: auto
+
+brews:
+  - name: netkit
+    repository:
+      owner: SiYue-ZO
+      name: homebrew-tap
+    directory: Formula
+    homepage: "https://github.com/SiYue-ZO/netkit"
+    description: "A multi-functional network reconnaissance and security toolkit written in Go"
+    test: |
+      system "#{bin}/netkit version"
+    install: |
+      bin.install "netkit"
